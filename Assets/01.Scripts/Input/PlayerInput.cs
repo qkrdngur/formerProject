@@ -6,8 +6,10 @@ using UnityEngine.Events;
 public class PlayerInput : MonoBehaviour
 {
     public UnityEvent<Vector2> OnMovement = null;
-    public UnityEvent<Vector2> OnJumped = null;
+    public UnityEvent<bool> OnJumped = null;
     public UnityEvent<Vector2> OnCameraPoint = null;
+
+    private bool _isJumped = false;
 
     // Start is called before the first frame update
     void Start()
@@ -35,11 +37,20 @@ public class PlayerInput : MonoBehaviour
 
     private void GetJump()
     {
-        float j = Input.GetAxisRaw("Jump");
+        //if (Physics2D.Raycast(transform.position, Vector3.down, .5f))
+        //    _isJumped = true;
+        //else
+        //    _isJumped = false;
 
-        Vector2 dir = new Vector2(0, j);
+        //float j = Input.GetAxisRaw("Jump");
 
-        OnJumped?.Invoke(dir);
+        //if (j == 0) _isJumped = false;
+        //else _isJumped = true;
+
+        if(Input.GetKey(KeyCode.Space)) _isJumped = true;
+        else _isJumped=false;
+
+        OnJumped?.Invoke(_isJumped);
     }
 
     private void GetKeyInput()

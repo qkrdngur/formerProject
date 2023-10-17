@@ -11,11 +11,14 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float _deAccel;
     [SerializeField] private float _jumpPower;
 
+    private float JumpPower => _jumpPower;
+
     private bool _isJumped = false;
 
     private Vector2 _direction;
-    private Vector2 _jumpDirection;
     private Rigidbody2D _rb;
+
+    private bool _isjumped = false;
 
     private void Awake()
     {
@@ -31,9 +34,14 @@ public class PlayerMovement : MonoBehaviour
                 _speed = 0;
             }
             _direction = value;
-
+            _direction.y = transform.position.y;
         }
         _speed = CalculateSpeed(value);
+    }
+
+    private void OnDrawGizmos()
+    {
+        Gizmos.DrawLine(transform.position, _direction);
     }
 
     private float CalculateSpeed(Vector2 moveInput)
@@ -50,21 +58,26 @@ public class PlayerMovement : MonoBehaviour
         return Mathf.Clamp(_speed, 0, _maxSpeed);
     }
 
-    public void Jump(Vector2 value)
+    public void Jump(bool isJump)
     {
-        _isJumped = true;
-        _jumpDirection = value;
+        //    if (!isJump)
+        //        _jumpPower = 0;
+        //    else
+        //        _jumpPower = JumpPower;
+
+        _isJumped = isJump;
     }
 
-    private void FixedUpdate()
+    private void Update()
     {
-        if (_isJumped)
+        if (Input.GetKeyDown(KeyCode.Space))
         {
-            _rb.AddForce(_jumpDirection * _jumpPower, ForceMode2D.Impulse);
-            _jumpDirection = Vector2.zero;
-            _isJumped = false;
+            if (Physics2D.Raycast(transform.position, Vector3.down, .5f))
+            {
+                _rb.velocity = Vector3.up * _jumpPower;
+            }
         }
-        else
-            _rb.velocity = _direction * _speed;
+
+       // _rb.velocity = _direction * _speed;
     }
 }
