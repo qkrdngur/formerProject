@@ -11,14 +11,8 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float _deAccel;
     [SerializeField] private float _jumpPower;
 
-    private float JumpPower => _jumpPower;
-
-    private bool _isJumped = false;
-
     private Vector2 _direction;
     private Rigidbody2D _rb;
-
-    private bool _isjumped = false;
 
     private void Awake()
     {
@@ -65,19 +59,21 @@ public class PlayerMovement : MonoBehaviour
         //    else
         //        _jumpPower = JumpPower;
 
-        _isJumped = isJump;
+        //_isJumped = isJump;
     }
 
-    private void Update()
+    private void FixedUpdate()
     {
-        if (Input.GetKeyDown(KeyCode.Space))
+        if (UnityEngine.Input.GetKey(KeyCode.Space))
         {
-            if (Physics2D.Raycast(transform.position, Vector3.down, .5f))
+            if (Physics2D.Raycast(transform.position, Vector3.down, 0.5f))
             {
+                Debug.Log(Vector3.up);
                 _rb.velocity = Vector3.up * _jumpPower;
+                //_rb.AddForce(Vector3.up * _jumpPower);
             }
         }
-
-       // _rb.velocity = _direction * _speed;
+        else
+            _rb.velocity = _direction * _speed;
     }
 }
