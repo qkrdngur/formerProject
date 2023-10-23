@@ -28,7 +28,7 @@ public class PlayerInput : MonoBehaviour
     private void GetPointerInput()
     {
         // 스크린 좌표, 월드 좌표, 뷰포트좌표
-        Vector3 mousePos = UnityEngine.Input.mousePosition;  //스크린 포지션의 마우스 좌표를 알아와.
+        Vector3 mousePos = Input.mousePosition;  //스크린 포지션의 마우스 좌표를 알아와.
         mousePos.z = 0;
         Vector2 mouseInWorldPos = Camera.main.ScreenToWorldPoint(mousePos);
 
@@ -55,7 +55,7 @@ public class PlayerInput : MonoBehaviour
 
     private void GetKeyInput()
     {
-        float x = UnityEngine.Input.GetAxisRaw("Horizontal");
+        float x = Input.GetAxisRaw("Horizontal");
 
         Vector2 dir = new Vector2(x, 0);
 

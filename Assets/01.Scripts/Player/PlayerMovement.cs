@@ -10,9 +10,12 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float _accel;
     [SerializeField] private float _deAccel;
     [SerializeField] private float _jumpPower;
+    [SerializeField] private float _dashPower;
 
-    private Vector2 _direction;
+    private Vector2 _direction = Vector2.zero;
     private Rigidbody2D _rb;
+
+    private bool isDash = false;
 
     private void Awake()
     {
@@ -64,16 +67,9 @@ public class PlayerMovement : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (UnityEngine.Input.GetKey(KeyCode.Space))
-        {
-            if (Physics2D.Raycast(transform.position, Vector3.down, 0.5f))
-            {
-                Debug.Log(Vector3.up);
-                _rb.velocity = Vector3.up * _jumpPower;
-                //_rb.AddForce(Vector3.up * _jumpPower);
-            }
-        }
+        if (isDash)
+            _rb.velocity = _direction.normalized * _dashPower;
         else
-            _rb.velocity = _direction * _speed;
+            _rb.velocity = new Vector2(_direction.x * _speed, _rb.velocity.y);
     }
 }
