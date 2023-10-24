@@ -4,72 +4,57 @@ using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
-    [Header("플레이어 수치")]
-    [SerializeField] private float _speed;
-    [SerializeField] private float _maxSpeed = 100;
-    [SerializeField] private float _accel;
-    [SerializeField] private float _deAccel;
-    [SerializeField] private float _jumpPower;
-    [SerializeField] private float _dashPower;
-
-    private Vector2 _direction = Vector2.zero;
     private Rigidbody2D _rb;
+    [SerializeField] private float speed = 3;
+    [SerializeField] private float jumpPower = 10;
+    [SerializeField] private float dashPower = 10;
+
+    [SerializeField] private LayerMask WhatIsGround;
+
+    private Vector2 direction = Vector2.zero;
 
     private bool isDash = false;
-
     private void Awake()
     {
-        _rb = GetComponent<Rigidbody2D>();
+        _rb = (Rigidbody2D)GetComponent("Rigidbody2D");
     }
-
-    public void Movement(Vector2 value)
-    {
-        if (value.sqrMagnitude > 0)
-        {
-            if (Vector3.Dot(_direction, value) < 0)
-            {
-                _speed = 0;
-            }
-            _direction = value;
-            _direction.y = transform.position.y;
-        }
-        _speed = CalculateSpeed(value);
-    }
-
-    private void OnDrawGizmos()
-    {
-        Gizmos.DrawLine(transform.position, _direction);
-    }
-
-    private float CalculateSpeed(Vector2 moveInput)
-    {
-        if (moveInput != Vector2.zero)
-        {
-            _speed += _accel * Time.deltaTime;
-        }
-        else if (_speed >= 0)
-        {
-            _speed -= _deAccel * Time.deltaTime;
-        }
-
-        return Mathf.Clamp(_speed, 0, _maxSpeed);
-    }
-
-    public void Jump(bool isJump)
-    {
-        //    if (!isJump)
-        //        _jumpPower = 0;
-        //    else
-        //        _jumpPower = JumpPower;
-
-        //_isJumped = isJump;
-    }
-
     private void FixedUpdate()
     {
         if (isDash)
-            _rb.velocity = _direction.normalized * _dashPower;
+            _rb.velocity = direction.normalized * dashPower;
         else
-            _rb.velocity = new Vector2(_direction.x * _speed, _rb.velocity.y);
+            _rb.velocity = new Vector2(direction.x * speed, _rb.velocity.y);
     }
+    public void Dash(bool value)
+    {
+        //StopImmediately();
+        //OnConnect_Movement(value);
+
+        StartCoroutine(DashCotoutine());
+    }
+
+    private IEnumerator DashCotoutine()
+    {
+        isDash = true;
+        yield return new WaitForSeconds(0.5f);
+        StopImmediately();
+        isDash = false;
+
+    }
+
+    public void OnConnect_Jump()
+    {
+        if (Physics2D.Raycast(transform.position, Vector3.down, 1f, WhatIsGround))
+            _rb.velocity = Vector3.up * jumpPower;
+    }
+    public void OnConnect_Movement(Vector2 value)
+    {
+        direction = value;
+    }
+
+    public void StopImmediately()
+    {
+        direction = Vector2.zero;
+    }
+
 }

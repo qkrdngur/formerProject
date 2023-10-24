@@ -5,6 +5,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using static InputSystem;
 
+[CreateAssetMenu(menuName = "SO/Input/Reader", fileName = "New Input reader")]
 public class InputReader : ScriptableObject, IPlayerActions
 {
     public event Action<Vector2> MovementEvent;
@@ -13,6 +14,7 @@ public class InputReader : ScriptableObject, IPlayerActions
     public Vector2 AimPostion { get; private set; }
 
     private InputSystem _input;
+
     private void OnEnable()
     {
         if (_input == null)
