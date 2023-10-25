@@ -10,7 +10,7 @@ public class PlayerInput : MonoBehaviour
 
     [Header("함수 연결")]
     [SerializeField] private UnityEvent<Vector2> OnMovement = null;
-    [SerializeField] private UnityEvent<Vector2> OnDash = null;
+    [SerializeField] private UnityEvent OnDash = null;
     [SerializeField] private UnityEvent OnJump = null;
 
     [Header("스크립트 연결")]
@@ -29,11 +29,18 @@ public class PlayerInput : MonoBehaviour
         _inputReader.DashEvent += OnHandleDash;
     }
 
-    private void OnHandleDash(Vector2 value)
+    private void OnHandleDash(bool value)
     {
-        Debug.Log("OnHandleDash");
-        Vector2 mousePos = CameraManager.Instance.Maincam.ScreenToWorldPoint(value);
-        OnDash?.Invoke(mousePos);
+        //    Debug.Log("OnHandleDash");
+        //    Vector2 mousePos = CameraManager.Instance.Maincam.ScreenToWorldPoint(value);
+        if (value == true)
+        {
+            OnDash?.Invoke();
+        }
+        else if (value == false)
+        {
+
+        }
     }
     private void OnHandleJump(bool value)
     {

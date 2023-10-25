@@ -25,10 +25,14 @@ public class PlayerMovement : MonoBehaviour
         else
             _rb.velocity = new Vector2(direction.x * speed, _rb.velocity.y);
     }
-    public void Dash(bool value)
+    public void Dash()
     {
         //StopImmediately();
         //OnConnect_Movement(value);
+        if (!isDash)
+        {
+            //_rb.AddForce(direction.normalized * dashPower, ForceMode2D.Impulse);
+        }
 
         StartCoroutine(DashCotoutine());
     }
@@ -36,7 +40,7 @@ public class PlayerMovement : MonoBehaviour
     private IEnumerator DashCotoutine()
     {
         isDash = true;
-        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForSeconds(0.3f);
         StopImmediately();
         isDash = false;
 
