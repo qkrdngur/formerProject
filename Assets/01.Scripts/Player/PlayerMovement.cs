@@ -1,64 +1,87 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerMovement : MonoBehaviour
+public class PlayerMovement : ConnectScript
 {
-    private Rigidbody2D _rb;
-    [SerializeField] private float speed = 3;
-    [SerializeField] private float jumpPower = 10;
-    [SerializeField] private float dashPower = 10;
+    PlayerRender playerRen;
 
-    [SerializeField] private LayerMask WhatIsGround;
+    [SerializeField] private LayerMask _whatIsGround;
 
-    private Vector2 direction = Vector2.zero;
+    private Vector2 _direction = Vector2.zero;
+    private Vector2 _Movedirection = Vector2.zero;
 
-    private bool isDash = false;
-    private void Awake()
+    private float _currentSpeed;
+
+    protected override void Awake()
     {
-        _rb = (Rigidbody2D)GetComponent("Rigidbody2D");
+        base.Awake();
+
+        playerRen = GameObject.Find("Visual").GetComponent<PlayerRender>();
+
+        _playerInput.OnMovement += OnMovement;
+        _playerInput.OnJump += OnJump;
+        _playerInput.OnDash += OnDash;
+        _playerInput.OnAttack += OnAttack;
     }
-    private void FixedUpdate()
+
+    private void Update()
     {
-        if (isDash)
-            _rb.velocity = direction.normalized * dashPower;
-        else
-            _rb.velocity = new Vector2(direction.x * speed, _rb.velocity.y);
+        if (_playerValue.IsDash) _currentSpeed = _playerValue._runSpeed;
+        else _currentSpeed = _playerValue._speed;
+
+        if (!_playerValue.IsDash && Mathf.Abs(_direction.x) != 0) _playerValue.IsWalk = true;
+        else _playerValue.IsWalk = false;
+
+        CalculateMovement();
+        Move();
+
+        CheckGround();
     }
-    public void Dash()
+
+    public  void OnAttack()
     {
-        //StopImmediately();
-        //OnConnect_Movement(value);
-        if (!isDash)
+
+    }
+
+    public  void OnDash()
+    {
+        _playerValue.IsDash = !_playerValue.IsDash;
+    }
+
+    public void OnMovement(Vector2 value)
+    {
+        _direction = value;
+    }
+
+    private void CalculateMovement()
+    {
+        _Movedirection = new Vector2(_direction.x * _currentSpeed, _rb.velocity.y);
+    }
+
+    private void Move()
+    {
+        if ((_playerValue.IsDash || _playerValue.IsWalk))
+            _rb.velocity = _Movedirection;
+    }
+
+    public  void OnJump()
+    {
+        if (_playerValue.IsGround)
         {
-            //_rb.AddForce(direction.normalized * dashPower, ForceMode2D.Impulse);
+            _rb.AddForce(Vector2.up * _playerValue._jumpPower, ForceMode2D.Impulse);
         }
-
-        StartCoroutine(DashCotoutine());
     }
 
-    private IEnumerator DashCotoutine()
+    private void CheckGround()
     {
-        isDash = true;
-        yield return new WaitForSeconds(0.3f);
-        StopImmediately();
-        isDash = false;
-
+        if(Physics2D.Raycast(transform.position, Vector2.down, 1f, _whatIsGround))
+            _playerValue.IsGround = true;
+        else
+            _playerValue.IsGround = false;
     }
 
-    public void OnConnect_Jump()
-    {
-        if (Physics2D.Raycast(transform.position, Vector3.down, 1f, WhatIsGround))
-            _rb.velocity = Vector3.up * jumpPower;
-    }
-    public void OnConnect_Movement(Vector2 value)
-    {
-        direction = value;
-    }
-
-    public void StopImmediately()
-    {
-        direction = Vector2.zero;
-    }
-
+    //좌우 벽점프 만들기
+    //벽 vector에  * -1 = 오른쪽
 }

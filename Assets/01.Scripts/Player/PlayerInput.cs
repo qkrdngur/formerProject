@@ -29,18 +29,11 @@ public class PlayerInput : MonoBehaviour
         _inputReader.DashEvent += OnHandleDash;
     }
 
-    private void OnHandleDash(bool value)
+    private void OnHandleDash()
     {
         //    Debug.Log("OnHandleDash");
         //    Vector2 mousePos = CameraManager.Instance.Maincam.ScreenToWorldPoint(value);
-        if (value == true)
-        {
             OnDash?.Invoke();
-        }
-        else if (value == false)
-        {
-
-        }
     }
     private void OnHandleJump(bool value)
     {
@@ -48,15 +41,10 @@ public class PlayerInput : MonoBehaviour
         {
             OnJump?.Invoke();
         }
-        else if (value == false)
-        {
-
-        }
     }
 
     private void OnHandleMovement(Vector2 value)
     {
-        Debug.Log("움직여라");
         OnMovement?.Invoke(value);
     }
     private void OnDestroy()
