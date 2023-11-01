@@ -5,8 +5,6 @@ using UnityEngine;
 
 public class PlayerMovement : ConnectScript
 {
-    PlayerRender playerRen;
-
     [SerializeField] private LayerMask _whatIsGround;
 
     private Vector2 _direction = Vector2.zero;
@@ -17,8 +15,6 @@ public class PlayerMovement : ConnectScript
     protected override void Awake()
     {
         base.Awake();
-
-        playerRen = GameObject.Find("Visual").GetComponent<PlayerRender>();
 
         _playerInput.OnMovement += OnMovement;
         _playerInput.OnJump += OnJump;
@@ -64,6 +60,9 @@ public class PlayerMovement : ConnectScript
     {
         if ((_playerValue.IsDash || _playerValue.IsWalk))
             _rb.velocity = _Movedirection;
+        Debug.Log(_playerValue.IsGround);
+        _animator.SetBool("grounded", _playerValue.IsGround);
+        _animator.SetFloat("velocityX", Mathf.Abs(_direction.x) / _currentSpeed);
     }
 
     public  void OnJump()
@@ -76,7 +75,7 @@ public class PlayerMovement : ConnectScript
 
     private void CheckGround()
     {
-        if(Physics2D.Raycast(transform.position, Vector2.down, 1f, _whatIsGround))
+        if(Physics2D.Raycast(transform.position, Vector2.down, 2f, _whatIsGround))
             _playerValue.IsGround = true;
         else
             _playerValue.IsGround = false;

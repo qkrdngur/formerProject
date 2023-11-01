@@ -134,7 +134,7 @@ GameObject:
   - component: {fileID: 418989218}
   - component: {fileID: 418989219}
   - component: {fileID: 418989221}
-  - component: {fileID: 418989220}
+  - component: {fileID: 418989222}
   m_Layer: 8
   m_Name: Visual
   m_TagString: Untagged
@@ -209,18 +209,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &418989220
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 418989217}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 835f2ceaa47dc624eb69e7b0a0d67607, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!95 &418989221
 Animator:
   serializedVersion: 5
@@ -242,6 +230,18 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &418989222
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 418989217}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 835f2ceaa47dc624eb69e7b0a0d67607, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &481960470
 GameObject:
   m_ObjectHideFlags: 0
@@ -959,10 +959,10 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1750538067}
-  - component: {fileID: 1750538070}
   - component: {fileID: 1750538074}
   - component: {fileID: 1750538073}
   - component: {fileID: 1750538076}
+  - component: {fileID: 1750538070}
   - component: {fileID: 1750538077}
   m_Layer: 8
   m_Name: Player
@@ -1053,7 +1053,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1750538065}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4f0693aa23d01dc46a4543a8089beabb, type: 3}
   m_Name: 
@@ -1061,7 +1061,7 @@ MonoBehaviour:
   OnCameraPoint:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 418989220}
+      - m_Target: {fileID: 418989222}
         m_TargetAssemblyTypeName: PlayerRender, Assembly-CSharp
         m_MethodName: Direction
         m_Mode: 0
