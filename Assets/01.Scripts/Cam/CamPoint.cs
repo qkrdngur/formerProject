@@ -6,15 +6,9 @@ using UnityEngine.Events;
 public class CamPoint : MonoBehaviour
 {
     [SerializeField] private UnityEvent<Vector2> OnCameraPoint;
-    // Start is called before the first frame update
-    void Start()
-    {
-    }
 
-    // Update is called once per frame
     void Update()
     {
-        
         GetPointerInput();
     }
 
