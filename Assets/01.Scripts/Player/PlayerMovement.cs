@@ -8,7 +8,9 @@ public class PlayerMovement : ConnectScript
     [SerializeField] private LayerMask _whatIsGround;
 
     private Vector2 _direction = Vector2.zero;
-    private Vector2 _Movedirection = Vector2.zero;
+    private Vector2 _moveDirection = Vector2.zero;
+
+    private Vector2 _jumpDirection = Vector2.zero;
 
     private float _currentSpeed;
 
@@ -31,6 +33,7 @@ public class PlayerMovement : ConnectScript
         else _playerValue.IsWalk = false;
 
         CalculateMovement();
+        WallJump();
         Move();
 
         CheckGround();
@@ -53,14 +56,14 @@ public class PlayerMovement : ConnectScript
 
     private void CalculateMovement()
     {
-        _Movedirection = new Vector2(_direction.x * _currentSpeed, _rb.velocity.y);
+        _moveDirection = new Vector2(_direction.x * _currentSpeed, _rb.velocity.y);
     }
 
     private void Move()
     {
         if ((_playerValue.IsDash || _playerValue.IsWalk))
-            _rb.velocity = _Movedirection;
-        Debug.Log(_playerValue.IsGround);
+            _rb.velocity = _moveDirection;
+
         _animator.SetBool("grounded", _playerValue.IsGround);
         _animator.SetFloat("velocityX", Mathf.Abs(_direction.x) / _currentSpeed);
     }
@@ -69,18 +72,40 @@ public class PlayerMovement : ConnectScript
     {
         if (_playerValue.IsGround)
         {
-            _rb.AddForce(Vector2.up * _playerValue._jumpPower, ForceMode2D.Impulse);
+            _rb.AddForce(Vector2.right * _playerValue._jumpPower, ForceMode2D.Impulse);
         }
     }
 
     private void CheckGround()
     {
         if(Physics2D.Raycast(transform.position, Vector2.down, 2f, _whatIsGround))
+        {
+            _jumpDirection = Vector2.up;
             _playerValue.IsGround = true;
+        }
         else
             _playerValue.IsGround = false;
     }
 
     //좌우 벽점프 만들기
     //벽 vector에  * -1 = 오른쪽
+    private void WallJump()
+    {
+        if (Physics2D.Raycast(transform.position, Vector2.left, 2f, _whatIsGround))
+        { 
+            _jumpDirection = Vector2.right;
+            _playerValue.IsGround = true;
+        }
+        else
+            _playerValue.IsGround = false;
+
+        if (Physics2D.Raycast(transform.position, Vector2.right, 2f, _whatIsGround))
+        {
+            _jumpDirection = Vector2.left;
+            _playerValue.IsGround = true;
+        }
+        else
+            _playerValue.IsGround = false;
+
+    }
 }
